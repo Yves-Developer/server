@@ -1,22 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Socket Test</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket.IO Location Tracking</title>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
+      // Connect to the server via Socket.IO
       const socket = io("https://gofasterserver.onrender.com/");
+      
+      // Log connection information
       socket.on("connect", () => {
         console.log("Connected with ID:", socket.id);
       });
-// listen a message to the server: 3000
+
+      // Listen for any messages from the server
       socket.on("message", (msg) => {
         console.log("Received message:", msg);
       });
-      // send a message to the server: 3000
-      socket.emit("clientmessage", "Hello from client!");
+
+      // Function to send location data to the server
+      const sendLocationToServer = (latitude, longitude) => {
+        const location = {
+          lat: latitude,
+          lon: longitude,
+        };
+        socket.emit("clientmessage", location); // Send location to the server
+        console.log("Sent location:", location);
+      };
+
+      // Watch for geolocation updates
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Log the location and send it to the server
+            console.log("Sending location:", latitude, longitude);
+            sendLocationToServer(latitude, longitude);
+          },
+          (error) => {
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                console.error("User denied the request for Geolocation.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                console.error("Location information is unavailable.");
+                break;
+              case error.TIMEOUT:
+                console.error("The request to get user location timed out.");
+                break;
+              case error.UNKNOWN_ERROR:
+                console.error("An unknown error occurred.");
+                break;
+              default:
+                console.error("Geolocation error:", error);
+            }
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
     </script>
   </head>
   <body>
-    <h1>Socket.IO Test Page</h1>
+    <h1>Real-time Location Tracking with Socket.IO</h1>
+    <p>Sending your location to the server in real-time...</p>
   </body>
 </html>
