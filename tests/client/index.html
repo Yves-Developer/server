@@ -25,7 +25,7 @@
           lat: latitude,
           lon: longitude,
         };
-        socket.emit("clientmessage", location); // Send location to the server
+        socket.emit("location", location); // Send location to the server
         console.log("Sent location:", location);
       };
 
