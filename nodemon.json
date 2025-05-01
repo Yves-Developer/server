@@ -1,0 +1,6 @@
+{
+  "watch": ["/"],
+  "ext": "ts",
+  "ignore": ["dist"],
+  "exec": "nodemon --watch './' --exec tsx main.ts"
+}
