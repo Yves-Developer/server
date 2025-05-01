@@ -8,10 +8,12 @@
       socket.on("connect", () => {
         console.log("Connected with ID:", socket.id);
       });
-
+// listen a message to the server: 3000
       socket.on("message", (msg) => {
         console.log("Received message:", msg);
       });
+      // send a message to the server: 3000
+      socket.emit("clientmessage", "Hello from client!");
     </script>
   </head>
   <body>

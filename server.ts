@@ -14,8 +14,10 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("user disconnected", socket.id);
   });
-  socket.on("message", (msg) => {
+  // Listen for messages from the client
+  socket.on("clientmessage", (msg) => {
     console.log("message: ", msg);
+    // Broadcast the message to all connected clients
     io.emit("message", msg);
   });
 });
